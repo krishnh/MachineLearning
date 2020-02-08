@@ -1,0 +1,69 @@
+### Understanding Decesion tree####
+###example : 1 Identfying Risk bank Loans
+###Step 2: Exploring and preparing the data 
+
+
+ Credit <- read.csv("D:\\DataScience\\dataset\\credit.csv")
+ View(credit)
+
+ table(credit$checking_balance)
+
+ table (credit$savings_balance)
+
+
+ summary(credit$months_loan_duration)
+
+ summary(credit$amount)
+
+ table(credit$default)
+ no yes 
+ 700 300 
+ 
+#*** This means we have 30% default which is happening 
+ set.seed(123456)
+ head(credit)
+ 
+#shuffling the entire data set 
+# using random sampling 
+ credit_rand <- credit[order(runif(1000)),]
+
+ 
+ #split the data frames into train and the test
+ #70,30
+ credit_train <- credit_rand[1:900,]
+ credit_test <- credit_rand[901:1000,]
+ 
+ #check the proportions of class variables
+ prop.table(table(credit_train$default))
+ prop.table(table(credit_test$default))
+ 
+ ##Step:3 : Training a model on the data 
+ # build the simplest decision tree
+ 
+ library(C50)
+ str(credit_train)
+c = as.factor(credit_train$default)
+c
+
+
+str(credit)
+
+
+
+credit_model <- C5.0(credit_train[-17],c)
+str(credit_model)
+#display simple facts about tree
+?C5.0
+
+credit_model
+#display detailed information about the tree
+summary(credit_model)
+
+#Step :4 Evluate model performence---
+#create a factor vector of prediction on test data 
+
+credit_pred <- predict(credit_model,credit_test)
+x=as.data.frame(credit_pred)
+x
+summary(x)
+str(credit_pred)
